@@ -63,8 +63,22 @@ router.put('/:id', validateProjectId, (req, res) => {
     })
 })
 
-router.delete('/:id', (req, res) => {
-
+router.delete('/:id', validateProjectId, (req, res) => {
+    const { id } = req.params
+    db.remove(id)
+    .then(deleted => {
+        if(deleted) {
+            // console.log(deleted)
+            res.status(204).end()
+            // res.status(204).json({ success: true, message: `action ${id} deleted successfully`, deleted })
+        } else {
+            res.status(404).json({ success: false, message: "The action with the specified ID does not exist."})
+        }
+    })
+    .catch(err => {
+        console.log(err)
+        res.status(500).json({ success: false, message: "The action could not be removed", err })
+    })
 })
 
 // Middleware
