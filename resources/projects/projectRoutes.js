@@ -37,11 +37,11 @@ router.get('/:id', (req, res) => {
 router.post('/', (req, res) => {
 })
 
-router.put('/', (req, res) => {
+router.put('/:id', (req, res) => {
 
 })
 
-router.delete('/', (req, res) => {
+router.delete('/:id', (req, res) => {
 
 })
 

@@ -48,12 +48,39 @@ router.post('/', validateAction, validateProject_Id, (req, res) => {
     })
 })
 
-router.put('/', (req, res) => {
+router.put('/:id', validateActionId, (req, res) => {
+    console.log(req.action)
+    const { id } = req.params
+    const changes = req.body
+    db.update(id, changes)
+    .then(updated => {
+        if(updated){
+            res.status(200).json({ success: true, message: `${updated} completed successfully!`, updated })
+        }else{
+            res.status(404).json({ success: false, message: 'no action found' })
+        }
+    })
+    .catch(err => {
+        console.log(err)
+        res.status(500).json({ success: false, message: 'no such luck', err })
+    })
+});
 
-})
-
-router.delete('/', (req, res) => {
-
+router.delete('/:id', validateActionId, (req, res) => {
+    const { id } = req.params
+    db.remove(id)
+    .then(deleted => {
+        if(deleted) {
+            // console.log(deleted)
+            res.status(204).json({ success: true, message: `action ${id} deleted successfully`, deleted })
+        } else {
+            res.status(404).json({ success: false, message: "The action with the specified ID does not exist."})
+        }
+    })
+    .catch(err => {
+        console.log(err)
+        res.status(500).json({ success: false, message: "The action could not be removed", err })
+    })
 })
 
 // Middleware
@@ -70,6 +97,25 @@ function validateAction(req, res, next) {
     }
 };
 
+
+function validateActionId(req, res, next) {
+    if(req.params && req.params.id) {
+        // console.log(req.params)
+        const idfound = db.get(req.params.id)
+        .then(action => {
+            if(idfound){
+            req.action = action 
+            next()
+            }else{
+                res.status(400).json({ message: 'Invalid action id!' })
+            }
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).json({ message: 'unknown server error validating id', err })
+        })
+    }
+} 
 
 function validateProject_Id(req, res, next) {
     // console.log(req.params)
