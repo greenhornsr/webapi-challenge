@@ -46,11 +46,21 @@ router.post('/', validateProject, (req, res) => {
     })
 })
 
-router.put('/:id', (req, res) => {
-
-
-    
-
+router.put('/:id', validateProjectId, (req, res) => {
+    const { id } = req.params
+    const changes = req.body
+    db.update(id, changes)
+    .then(updated => {
+        if(updated){
+            res.status(200).json({ success: true, message: `${updated} completed successfully!`, updated })
+        }else{
+            res.status(404).json({ success: false, message: 'no project found' })
+        }
+    })
+    .catch(err => {
+        console.log(err)
+        res.status(500).json({ success: false, message: 'no such luck', err })
+    })
 })
 
 router.delete('/:id', (req, res) => {
