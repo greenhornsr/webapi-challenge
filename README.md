@@ -25,14 +25,19 @@ In this challenge, create a web API around the following resources: `Projects` a
 Demonstrate your understanding of this Sprint's concepts by answering the following free-form questions. Edit this document to include your answers after each question. Make sure to leave a blank line above and below your answer so it is clear and easy to read by your project manager.
 
 - [ ] Mention two parts of Express that you learned about this week.
+    middleware, resources, the homies(req, res)
 
 - [ ] Describe Middleware?
+    middleware can be built-in, third party or custom.  They execute during the route lifecycle request.  Middleware has access to the homies of the route its attached to and next!
 
 - [ ] Describe a Resource?
+    A Resource is typically nouns within the project scope.  i.e. in today's project we were looking for actions and projects...resources.
 
 - [ ] What can the API return to help clients know if a request was successful?
+    The API can return a response object that includes status code, message, data from the data store, etc.
 
 - [ ] How can we partition our application into sub-applications?
+    by seperating the resources into different files and handle their routes seperately.
 
 ## Project Setup
 
