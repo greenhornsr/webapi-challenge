@@ -13,9 +13,21 @@ router.get('/', (req, res) => {
     })
     .catch(err => {
         console.log(err)
-        res.status(400).json({ success: false, message: "ewww, no such luck.  No Actions!", err })
+        res.status(400).json({ success: false, message: "ewww, no such luck.  No Actions Found!", err })
     })
 });
+
+router.get('/:id', (req, res) => {
+    const { id } = req.params
+    db.get(id)
+    .then(action => {
+        res.status(200).json({ success: true, message: "Got one!", action })
+    })
+    .catch(err => {
+        console.log(err)
+        res.status(400).json({ success: false, message: "ewww, no such luck.  No Action Found!", err })
+    })
+})
 
 router.post('/', (req, res) => {
 })
