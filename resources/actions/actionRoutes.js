@@ -72,7 +72,8 @@ router.delete('/:id', validateActionId, (req, res) => {
     .then(deleted => {
         if(deleted) {
             // console.log(deleted)
-            res.status(204).json({ success: true, message: `action ${id} deleted successfully`, deleted })
+            res.status(204).end()
+            // res.status(204).json({ success: true, message: `action ${id} deleted successfully`, deleted })
         } else {
             res.status(404).json({ success: false, message: "The action with the specified ID does not exist."})
         }

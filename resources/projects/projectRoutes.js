@@ -34,7 +34,16 @@ router.get('/:id', (req, res) => {
     })
 })
 
-router.post('/', (req, res) => {
+router.post('/', validateProject, (req, res) => {
+    const newproject = req.body;
+    db.insert(newproject)
+    .then(project => {
+        res.status(201).json({ success: true, message: `${newproject.name} was added successfully!`, project })
+    })
+    .catch(err => {
+        console.log(err)
+        res.status(500).json({ success: false, message: 'server error', err})
+    })
 })
 
 router.put('/:id', (req, res) => {
@@ -45,6 +54,37 @@ router.delete('/:id', (req, res) => {
 
 })
 
+// Middleware
+function validateProject(req, res, next) {
+    // console.log('im in validateUser')
+    if(!req.body.description){
+        res.status(400).json({ message: 'Missing required description field' })
+    }else if(!req.body.name){
+        res.status(400).json({ message: 'Missing required name field' })
+    }else{
+        next();
+    }
+};
+
+
+function validateProjectId(req, res, next) {
+    if(req.params && req.params.id) {
+        // console.log(req.params)
+        const idfound = db.get(req.params.id)
+        .then(action => {
+            if(idfound){
+            req.action = action 
+            next()
+            }else{
+                res.status(400).json({ message: 'Invalid project id!' })
+            }
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).json({ message: 'unknown server error validating id', err })
+        })
+    }
+} 
 
 
 
